@@ -2,20 +2,21 @@
 
 pragma solidity ^0.8.0;
 
-import "./SmartAccountContract.sol";
+import "../interfaces/ISmartAccountContract.sol";
 
 contract TestContract {
-    function transferFunds(
+    function testLeverage(
+        address _logicAddr,
         address _account,
-        address _token,
+        address _from,
         uint256 _amount
     ) public {
-        SmartAccountContract smartAccount = SmartAccountContract(_account);
+        ISmartAccountContract smartAccount = ISmartAccountContract(_account);
 
         bytes4 functionSelector = bytes4(
-            keccak256("transferFunds(address,uint256)")
+            keccak256("leverage(address,uint256)")
         );
-        bytes memory data = abi.encode(_token, _amount);
-        smartAccount.executeFunction(functionSelector, data);
+        bytes memory data = abi.encode(_from, _amount);
+        smartAccount.executeFunction(_logicAddr, functionSelector, data);
     }
 }
