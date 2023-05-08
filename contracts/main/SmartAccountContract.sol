@@ -64,6 +64,11 @@ contract SmartAccountContract {
         bytes4 _functionSelector,
         bytes calldata _data
     ) external onlyWhitelist {
+        require(
+            !isBlacklisted(_contractAddr) &&
+                (isRegistered(_contractAddr) || isWhitelisted(_contractAddr)),
+            "This logic contract is blacklisted or not in the whitelist"
+        );
         (bool success, ) = _contractAddr.call(
             abi.encodePacked(_functionSelector, _data)
         );
